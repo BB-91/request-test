@@ -1,13 +1,13 @@
 import './App.css';
 import { useRef } from 'react';
-import downloader from './data/responseDownloader.mjs';
+import s3Downloader from './data/s3Downloader.mjs';
 
 function App() {
     const filenameInputRef = useRef(null);
 
     const handleDownloadFileButtonClicked = () => {
         const filename = filenameInputRef.current.value;
-        downloader.downloadS3File(filename);
+        s3Downloader.downloadS3File(filename);
     }
 
     return (

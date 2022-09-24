@@ -1,6 +1,9 @@
-class Downloader {
+class S3Downloader {
     #serverURL = "http://localhost:3001";
 
+    /**
+     * @returns {String[]} returns an array of all filenames in s3 bucket
+     */
     async #getS3FileNames() {
         const s3FileNames = await fetch(this.#serverURL + "/list").then(res => { return res.json(); })
         return s3FileNames;
@@ -10,7 +13,7 @@ class Downloader {
      * @param {Response} response - response from fetch GET request
      * @param {String} saveAsName - name to save file as
      */
-     async #downloadFile(fetchResponse, saveAsName) {
+     async #downloadFileFromFetchResponse(fetchResponse, saveAsName) {
         if (!saveAsName) {
             throw new Error(`Recieved no 'saveAsName' arg`);
         } else if (typeof saveAsName !== "string") {
@@ -37,7 +40,10 @@ class Downloader {
         }
     }
 
-    async downloadS3File(filename) {
+    /**
+     * @param {String} filename - name of s3 file
+     */
+    async download(filename) {
         const validExtensions = [".jpg", ".png", ".pdf"];
     
         const getExampleFilenamesWithExtensions = () => {
@@ -54,7 +60,7 @@ class Downloader {
                 alert(`Invalid filename: '${filename}'\nCheck spelling and extension, then try again.`);
             } else {
                 const response = await fetch(this.#serverURL + "/download/" + filename);
-                const downloadSucceeded = await this.#downloadFile(response, filename);
+                const downloadSucceeded = await this.#downloadFileFromFetchResponse(response, filename);
                 if (!downloadSucceeded) {
                     throw new Error(`Failed to download ${filename}`);
                 }
@@ -63,6 +69,6 @@ class Downloader {
     }
 }
 
-const downloader = new Downloader();
+const s3Downloader = new S3Downloader();
 
-export default downloader;
+export default s3Downloader;
