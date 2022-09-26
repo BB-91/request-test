@@ -1,5 +1,7 @@
+import { serverURL } from "./serverData.mjs";
+
 class S3Downloader {
-    #serverURL = "http://localhost:3001";
+    #serverURL = serverURL;
 
     /**
      * @returns {String[]} returns an array of all filenames in s3 bucket

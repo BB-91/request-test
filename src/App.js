@@ -1,21 +1,19 @@
 import './App.css';
-import { useRef } from 'react';
-import s3Downloader from './data/s3Downloader.mjs';
+import S3DownloadComponent from './components/S3DownloadComponent/S3DownloadComponent';
+import S3UploadComponent from './components/S3UploadComponent/S3UploadComponent';
+import { isValidSignInToken } from './data/signInTokenValidator.mjs'; 
+
+const TEST_SIGN_IN_TOKEN = "xyz789";
+let signedIn = isValidSignInToken(TEST_SIGN_IN_TOKEN);
 
 function App() {
-    const filenameInputRef = useRef(null);
 
-    const handleDownloadFileButtonClicked = () => {
-        const filename = filenameInputRef.current.value;
-        s3Downloader.downloadS3File(filename);
-    }
+    // const s3 = new AWS.s3;
 
     return (
         <div className="App">
-            <input ref={filenameInputRef} type="text" ></input>
-            {/* <input type="button" value={"get S3 filenames"} onClick={getS3FileNames}/> */}
-            {/* <input type="button" value={"get signed url"} onClick={getSignedURL}/> */}
-            <input type="button" value={"download file"} onClick={handleDownloadFileButtonClicked}/>
+            <S3DownloadComponent signedIn={signedIn}/>
+            <S3UploadComponent signedIn={signedIn}/>
         </div>
     );
 }

@@ -11,6 +11,7 @@ const app = express();
 const port = 3001;
 
 app.use(cors({origin: "http://localhost:3000"}))
+// app.use(cors({origin: "*"}))
 // app.use(bodyParser.json());
 // app.use(LOCAL_API.PATH, router);
 
@@ -41,12 +42,9 @@ const upload = multer({
 })
 
 app.post('/upload', upload.single('file'), async (req, res, next) => {
-    res.send('Successfully uploaded ' + req.file.location + ' location!')
+    // res.send('Successfully uploaded ' + req.file.location + ' location!')
+    res.send('*attempted* to upload file.')
 })
-
-// app.post('/uploads', upload.array('files'), async (req, res, next) => {
-//     res.send('Successfully uploaded ' + req.file.location + ' location!')
-// })
 
 app.get("/list", async (req, res) => {
     const result = await s3.listObjectsV2({ Bucket: BUCKET }).promise();
@@ -55,7 +53,6 @@ app.get("/list", async (req, res) => {
 })
 
 const getPresignedURL = async (filename) => {
-    // const s3 = createS3Instance();
     const params = {
         Bucket: BUCKET,
         Key: filename,
@@ -63,7 +60,6 @@ const getPresignedURL = async (filename) => {
     }
 
     const preSignedURL = await s3.getSignedUrl('getObject', params);
-    // const preSignedURL = await s3.getSignedUrl('getObject', params).promise();
     return preSignedURL;
 }
 
@@ -77,42 +73,16 @@ app.get("/signedurl/:filename", async (req, res) => {
     }
 
     const preSignedURL = s3.getSignedUrl('getObject', params);
-    // const preSignedURL = await s3.getSignedUrl('getObject', params);
-    // const preSignedURL = await s3.getSignedUrl('getObject', params).promise();
-    // return preSignedURL;
-
     console.log("preSignedURL: ", preSignedURL)
-
-    // res.send("signed url...")
-    // res.send(`signed url: ${preSignedURL}`)
     res.send(String(preSignedURL));
 })
-
-// app.get("/signedurl/:filename", async (req, res) => {
-//     const filename = req.params.filename
-//     const presignedURL = await getPresignedURL(filename);
-//     // res.status(200).send("presignedURL: ", presignedURL);
-//     res.status(200).send("presignedURL: ", presignedURL);
-//     // res.status(200).send("attempted download of: " + filename)
-// })
 
 app.get("/download/:filename", async (req, res) => {
     const filename = req.params.filename
     let result = await s3.getObject({ Bucket: BUCKET, Key: filename }).promise();
-    // res.send(result.Body)
     console.log("result: ", result);
     res.status(200).send(result.Body)
-    // res.status(200).send("attempted download of: " + filename)
 })
-
-// app.get("/download/:filename", async (req, res) => {
-//     const filename = req.params.filename
-//     let result = await s3.getObject({ Bucket: BUCKET, Key: filename }).promise();
-//     // res.send(result.Body)
-//     console.log("result: ", result);
-//     res.status(200).send(result.Body)
-//     // res.status(200).send("attempted download of: " + filename)
-// })
 
 app.delete("/delete/:filename", async (req, res) => {
     const filename = req.params.filename
