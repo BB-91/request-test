@@ -1,4 +1,5 @@
 import { serverURL } from "./serverData.mjs";
+import validExtensions from "./validExtensions.mjs";
 
 class S3Downloader {
     #serverURL = serverURL;
@@ -46,8 +47,7 @@ class S3Downloader {
      * @param {String} filename - name of s3 file
      */
     async download(filename) {
-        const validExtensions = [".jpg", ".png", ".pdf"];
-    
+            
         const getExampleFilenamesWithExtensions = () => {
             return validExtensions.slice(0, 3).map(extension => filename + extension);
         }

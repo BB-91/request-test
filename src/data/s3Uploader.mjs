@@ -6,7 +6,6 @@ class S3Uploader {
     async upload(file) {
         const formData = new FormData();
         formData.append("file", file);
-        // const uploadResponse = await fetch("http://localhost:3001/upload", {
         const uploadResponse = await fetch(`${this.#serverURL}/upload`, {
             method: 'POST',
             headers: {

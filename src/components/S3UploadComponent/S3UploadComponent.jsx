@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import "./S3UploadComponent.scss";
 import s3Uploader from "../../data/s3Uploader.mjs";
+import validExtensions from "../../data/validExtensions.mjs";
 
 const KEY = {
     file_upload: "file-upload",
@@ -19,7 +20,7 @@ const S3UploadComponent = (props) => {
         <div className='s3-upload-component'>
             S3UploadComponent
 
-            <input ref={fileUploadElement} type="file" name={KEY.file_upload} className={KEY.file_upload} onChange={handleFileInputChange} />
+            <input ref={fileUploadElement} type="file" accept={validExtensions.join(",")} name={KEY.file_upload} className={KEY.file_upload} onChange={handleFileInputChange} />
         </div>
     )
 }

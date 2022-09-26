@@ -7,9 +7,6 @@ const TEST_SIGN_IN_TOKEN = "xyz789";
 let signedIn = isValidSignInToken(TEST_SIGN_IN_TOKEN);
 
 function App() {
-
-    // const s3 = new AWS.s3;
-
     return (
         <div className="App">
             <S3DownloadComponent signedIn={signedIn}/>
