@@ -3,124 +3,23 @@ import { serverURL } from "./serverData.mjs";
 class S3Uploader {
     #serverURL = serverURL;
 
-    // /**
-    //  * @returns {String[]} returns an array of all filenames in s3 bucket
-    //  */
-    // async #getS3FileNames() {
-    //     const s3FileNames = await fetch(this.#serverURL + "/list").then(res => { return res.json(); })
-    //     return s3FileNames;
-    // }
+    async upload(file) {
+        const formData = new FormData();
+        formData.append("file", file);
+        // const uploadResponse = await fetch("http://localhost:3001/upload", {
+        const uploadResponse = await fetch(`${this.#serverURL}/upload`, {
+            method: 'POST',
+            headers: {
+                'Accept': '*/*',
+                'Content-Length': '<calculated when request is sent>',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'Connection': 'keep-alive'
+            },
+            body: formData
+        })
 
-    // /**
-    //  * @param {Response} response - response from fetch GET request
-    //  * @param {String} saveAsName - name to save file as
-    //  */
-    //  async #downloadFileFromFetchResponse(fetchResponse, saveAsName) {
-    //     if (!saveAsName) {
-    //         throw new Error(`Recieved no 'saveAsName' arg`);
-    //     } else if (typeof saveAsName !== "string") {
-    //         throw new Error(`Not a string: ${saveAsName}`)
-    //     }
-    
-    //     if (!fetchResponse) {
-    //         throw new Error(`fetchResponse is null or undefined: ${fetchResponse}`) 
-    //     } else if (!(fetchResponse instanceof Response)) {
-    //         throw new Error(`Not an instance of Response: ${fetchResponse}`);
-    //     } else {
-    //         const blob = await fetchResponse.blob();
-    //         const newBlob = new Blob([blob]);
-    //         const blobUrl = window.URL.createObjectURL(newBlob);
-        
-    //         const link = document.createElement('a');
-    //         link.href = blobUrl;
-    //         link.setAttribute('download', saveAsName);
-    //         document.body.appendChild(link);
-    //         link.click();
-    //         link.parentNode.removeChild(link);
-    //         window.URL.revokeObjectURL(blobUrl);
-    //         return true;
-    //     }
-    // }
-
-    // /**
-    //  * @param {String} filename - name of s3 file
-    //  */
-    // async download(filename) {
-    //     const validExtensions = [".jpg", ".png", ".pdf"];
-    
-    //     const getExampleFilenamesWithExtensions = () => {
-    //         return validExtensions.slice(0, 3).map(extension => filename + extension);
-    //     }
-    
-    //     if (!filename) {
-    //         alert("Please enter a filename");
-    //     } else if (!filename.includes(".")) {
-    //         alert(`Please enter extension (i.e., ${getExampleFilenamesWithExtensions().join(", ")})`);
-    //     } else {
-    //         const s3Filenames = await this.#getS3FileNames();
-    //         if (!s3Filenames.includes(filename)) {
-    //             alert(`Invalid filename: '${filename}'\nCheck spelling and extension, then try again.`);
-    //         } else {
-    //             const response = await fetch(this.#serverURL + "/download/" + filename);
-    //             const downloadSucceeded = await this.#downloadFileFromFetchResponse(response, filename);
-    //             if (!downloadSucceeded) {
-    //                 throw new Error(`Failed to download ${filename}`);
-    //             }
-    //         }
-    //     }
-    // }
-
-
-    // app.post('/upload', upload.single('file'), async (req, res, next) => {
-    //     res.send('Successfully uploaded ' + req.file.location + ' location!')
-    // })
-
-
-    // const postProfile = async (profile) => {
-    //     validator.assertNonArrayObj(profile);
-
-    //     console.log("profile ABOUT TO BE POSTED: ", profile)
-
-    //     const postResponse = await fetch(localApiURL, {
-    //         method: 'POST',
-    //         headers: {
-    //           'Accept': 'application/json',
-    //           'Content-Type': 'application/json'
-    //         },
-
-    //         body: JSON.stringify(profile)
-    //     })
-    //     .then(res => res.json())
-
-    //     return postResponse
-    // }
-
-
-    // const postResponse = await postProfile(formValuesObj);
-    // const formValuesObj = await getFormValuesAsObj();
-
-    // const getFormValuesAsObj = async () => {
-    //     const keys = Object.values(KEY);
-    //     const elements = Object.values(keyRefObj).map(ref => ref.current);
-    //     console.log("elements: ", elements);
-
-    //     const values = elements.map(element => element.value.trim());
-    //     const obj = {};
-    //     keys.forEach((key, index) => {
-    //         obj[key] = values[index];
-    //     });
-
-    //     obj[KEY.pdf] = await getPDF();
-    //     console.log("getFormValuesAsObj obj: ", obj);
-
-    //     return obj;
-    // }
-
-    // async upload(filename) {
-
-    // }
-
-
+        console.log("uploadResponse: ", uploadResponse)
+    }
 }
 
 
